@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, StyleSheet, Image } from 'react-native'
 import { colors } from '../utils'
 
-export default function WeatherInfo({ currentWeather }) {
+function WeatherInfo({ currentWeather, unitSystem }) {
   const {
     main: { temp },
     weather: [detail],
@@ -16,7 +16,9 @@ export default function WeatherInfo({ currentWeather }) {
     <View style={styles.weatherInfo}>
       <Text>{name}</Text>
       <Image style={styles.weatherIcon} source={{ uri: iconUrl }} />
-      <Text style={styles.textPrimary}>{temp}°</Text>
+      <Text style={styles.textPrimary}>
+        {temp}°{unitSystem === 'metric' ? 'C' : 'F'}
+      </Text>
       <Text style={styles.weatherDescription}>{description}</Text>
       <Text style={styles.textSecondary}>{main}</Text>
     </View>
@@ -45,3 +47,5 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 })
+
+export default WeatherInfo
