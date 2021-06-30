@@ -71,7 +71,7 @@ export default function WeatherDetails({ currentWeather, unitSystem }) {
         <View style={styles.weatherDetailsBox}>
           <View style={styles.weatherDetailsRow}>
             <Ionicons
-              name="speedometer-outlined"
+              name="speedometer-outline"
               size={28}
               color={PRIMARY_COLOR}
             />
