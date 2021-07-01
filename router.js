@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 import Weather from './screens/Weather'
 import Home from './screens/Home'
+import { colors } from './utils'
 
 const Stack = createStackNavigator()
 
@@ -19,7 +20,7 @@ export default function Router() {
         <Stack.Screen
           name="Weather"
           component={Weather}
-          options={{ headerShown: false }}
+          options={{ headerTintColor: colors.PRIMARY_COLOR }}
         />
       </Stack.Navigator>
     </NavigationContainer>

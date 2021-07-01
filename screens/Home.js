@@ -4,10 +4,10 @@ import { View, StyleSheet } from 'react-native'
 import Search from '../components/Search'
 import SearchHistory from '../components/SearchHistory'
 
-export default function Home() {
+export default function Home({ navigation }) {
   return (
     <View style={styles.body}>
-      <Search />
+      <Search navigation={navigation} />
       <SearchHistory />
     </View>
   )

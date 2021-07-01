@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   View,
   Text,
@@ -6,19 +6,52 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native'
+import * as Location from 'expo-location'
+import { useDispatch } from 'react-redux'
 import { colors } from '../utils'
 import { Foundation } from '@expo/vector-icons'
+import Stack from '@react-navigation/stack'
 
-export default function Search() {
+import {
+  getCoordinates,
+  getCurrentCoordinates,
+} from '../modules/locales/actions'
+
+export default function Search({ navigation }) {
+  const [city, setCity] = useState()
+  const dispatch = useDispatch()
+
+  const handleInputChange = (value) => {
+    setCity(value)
+  }
+
+  const handleSubmitCity = () => {
+    dispatch(getCoordinates({ city, navigation }))
+  }
+
+  const handleCurrentLocation = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync()
+    if (status !== 'granted') {
+      setErrorMessage('Access to location is needed to run the app')
+      return
+    }
+
+    const location = await Location.getCurrentPositionAsync()
+    const { latitude, longitude } = location.coords
+
+    dispatch(getCurrentCoordinates({ latitude, longitude }))
+    navigation.push('Weather')
+  }
+
   return (
     <View style={styles.body}>
       <Text style={styles.text}>Type your location here:</Text>
-      <TextInput style={styles.input} />
+      <TextInput style={styles.input} onChangeText={handleInputChange} />
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleSubmitCity}>
           <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleCurrentLocation}>
           <Foundation name="target-two" size={24} color="white" />
         </TouchableOpacity>
       </View>

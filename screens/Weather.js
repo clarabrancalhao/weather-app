@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native'
-import * as Location from 'expo-location'
+import { useSelector } from 'react-redux'
 import WeatherInfo from '../components/WeatherInfo'
 import WeatherDetails from '../components/WeatherDetails'
 import UnitsPicker from '../components/UnitsPicker'
@@ -16,20 +16,13 @@ export default function Weather() {
   const [currentWeather, setCurrentWeather] = useState()
   const [unitSystem, setUnitSystem] = useState('metric')
 
+  const coordinates = useSelector((state) => state.locales)
+
   const load = async () => {
     setCurrentWeather(null)
     setErrorMessage(null)
     try {
-      const { status } = await Location.requestForegroundPermissionsAsync()
-      if (status !== 'granted') {
-        setErrorMessage('Access to location is needed to run the app')
-        return
-      }
-
-      const location = await Location.getCurrentPositionAsync()
-      const { latitude, longitude } = location.coords
-
-      const weatherUrl = `${BASE_WEATHER_URL}lat=${latitude}&lon=${longitude}&units=${unitSystem}&appid=${WEATHER_API_KEY}`
+      const weatherUrl = `${BASE_WEATHER_URL}lat=${coordinates.latitude}&lon=${coordinates.longitude}&units=${unitSystem}&appid=${WEATHER_API_KEY}`
 
       const response = await fetch(weatherUrl)
       const result = await response.json()
