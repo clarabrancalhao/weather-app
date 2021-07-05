@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image } from 'react-native'
+import { useSelector } from 'react-redux'
 import { colors } from '../utils'
 
 function WeatherInfo({ currentWeather, unitSystem }) {
@@ -9,12 +10,23 @@ function WeatherInfo({ currentWeather, unitSystem }) {
     name,
   } = currentWeather
 
+  const curLocation = useSelector((state) => state.locales.curLocation)
+
   const { icon, main, description } = detail
   const iconUrl = `https://openweathermap.org/img/wn/${icon}@4x.png`
 
+  const title =
+    name === curLocation?.city
+      ? `${name}${curLocation?.state ? `, ${curLocation?.state}` : ''}${
+          curLocation?.country ? ` - ${curLocation?.country}` : ''
+        }`
+      : `${name}${curLocation?.city ? `, ${curLocation?.city}` : ''}${
+          curLocation?.state ? `, ${curLocation?.state}` : ''
+        }${curLocation?.country ? ` - ${curLocation?.country}` : ''}`
+
   return (
     <View style={styles.weatherInfo}>
-      <Text>{name}</Text>
+      <Text>{title}</Text>
       <Image style={styles.weatherIcon} source={{ uri: iconUrl }} />
       <Text style={styles.textPrimary}>
         {temp}°{unitSystem === 'metric' ? 'C' : 'F'}

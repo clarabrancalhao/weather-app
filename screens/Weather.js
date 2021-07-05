@@ -48,15 +48,9 @@ export default function Weather() {
         <View style={styles.main}>
           <UnitsPicker unitSystem={unitSystem} setUnitSystem={setUnitSystem} />
           <ReloadIcon load={load} />
-          <WeatherInfo
-            currentWeather={currentWeather}
-            unitSystem={unitSystem}
-          />
+          <WeatherInfo currentWeather={currentWeather} unitSystem={unitSystem} />
         </View>
-        <WeatherDetails
-          currentWeather={currentWeather}
-          unitSystem={unitSystem}
-        />
+        <WeatherDetails currentWeather={currentWeather} unitSystem={unitSystem} />
       </View>
     )
   }

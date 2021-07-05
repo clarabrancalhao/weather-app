@@ -1,11 +1,5 @@
 import React, { useState } from 'react'
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import * as Location from 'expo-location'
 import { useDispatch } from 'react-redux'
 import { colors } from '../utils'
@@ -14,7 +8,9 @@ import Stack from '@react-navigation/stack'
 
 import {
   getCoordinates,
-  getCurrentCoordinates,
+  getCoordinatesCompleted,
+  getCurrentLocale,
+  pending,
 } from '../modules/locales/actions'
 
 export default function Search({ navigation }) {
@@ -26,10 +22,12 @@ export default function Search({ navigation }) {
   }
 
   const handleSubmitCity = () => {
+    dispatch(pending())
     dispatch(getCoordinates({ city, navigation }))
   }
 
   const handleCurrentLocation = async () => {
+    dispatch(pending())
     const { status } = await Location.requestForegroundPermissionsAsync()
     if (status !== 'granted') {
       setErrorMessage('Access to location is needed to run the app')
@@ -39,7 +37,10 @@ export default function Search({ navigation }) {
     const location = await Location.getCurrentPositionAsync()
     const { latitude, longitude } = location.coords
 
-    dispatch(getCurrentCoordinates({ latitude, longitude }))
+    dispatch(getCoordinatesCompleted({ lat: latitude, lng: longitude }))
+
+    dispatch(getCurrentLocale({ latitude, longitude, navigation }))
+
     navigation.push('Weather')
   }
 

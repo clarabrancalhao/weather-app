@@ -3,10 +3,18 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 
 import { colors } from '../utils'
+import { useDispatch } from 'react-redux'
+import { getCoordinates, pending } from '../modules/locales/actions'
 
-export default function SearchCard({ city, state, country }) {
+export default function SearchCard({ city, state, country, navigation }) {
+  const dispatch = useDispatch()
+
+  const handleSearch = () => {
+    dispatch(pending())
+    dispatch(getCoordinates({ city, navigation }))
+  }
   return (
-    <View style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={handleSearch}>
       <View style={styles.cardBody}>
         <View style={styles.cardWrapper}>
           <View style={styles.marker} />
@@ -21,7 +29,7 @@ export default function SearchCard({ city, state, country }) {
           <AntDesign name="arrowright" size={28} color={colors.PRIMARY_COLOR} />
         </TouchableOpacity>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 
